@@ -73,7 +73,7 @@ function ProjectDetail() {
       </header>
 
       <section className="mx-auto max-w-[1400px] space-y-10 px-6 py-16 md:px-12 md:py-24">
-        {project.gallery.map((src, i) => (
+        {project.gallery.map((src: string, i: number) => (
           <figure key={i} className="bg-paper-soft">
             <img
               src={src}
