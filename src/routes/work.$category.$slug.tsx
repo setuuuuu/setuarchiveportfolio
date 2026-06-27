@@ -1,45 +1,68 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { getCategory, getProject, getProjects, type Category } from "@/data/projects";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { getCategory, type Category } from "@/data/projects";
+import {
+  fetchProjectBySlug,
+  fetchProjectsByCategory,
+  fetchProjectImages,
+} from "@/lib/projects-api";
 
 export const Route = createFileRoute("/work/$category/$slug")({
   head: ({ params }) => {
-    const p = getProject(params.category as Category, params.slug);
-    const title = p ? `${p.title} — Studio / Name` : "Project — Studio / Name";
-    const desc = p?.blurb ?? "Project detail.";
+    const c = getCategory(params.category);
+    const title = c ? `${c.label} Project — Studio / Name` : "Project — Studio / Name";
     return {
       meta: [
         { title },
-        { name: "description", content: desc },
+        { name: "description", content: "Project detail." },
         { property: "og:title", content: title },
-        { property: "og:description", content: desc },
-        ...(p ? [{ property: "og:image", content: p.cover }, { name: "twitter:image", content: p.cover }] : []),
       ],
     };
   },
-  loader: ({ params }) => {
-    const c = getCategory(params.category);
-    if (!c) throw notFound();
-    const project = getProject(params.category as Category, params.slug);
-    if (!project) throw notFound();
-    const siblings = getProjects(params.category as Category);
-    const idx = siblings.findIndex((s) => s.slug === project.slug);
-    const prev = siblings[(idx - 1 + siblings.length) % siblings.length];
-    const next = siblings[(idx + 1) % siblings.length];
-    return { project, prev, next, categoryLabel: c.label };
-  },
   component: ProjectDetail,
-  notFoundComponent: () => (
-    <div className="mx-auto max-w-[1600px] px-6 py-32 md:px-12">
-      <p className="font-display text-3xl uppercase">Project not found</p>
-      <Link to="/work" className="link-underline mt-6 inline-block text-sm uppercase tracking-widest">
-        ← Back to work
-      </Link>
-    </div>
-  ),
 });
 
 function ProjectDetail() {
-  const { project, prev, next, categoryLabel } = Route.useLoaderData();
+  const { category, slug } = Route.useParams();
+  const cat = getCategory(category);
+
+  const projectQ = useQuery({
+    queryKey: ["project", category, slug],
+    queryFn: () => fetchProjectBySlug(category as Category, slug),
+  });
+
+  const siblingsQ = useQuery({
+    queryKey: ["projects", category],
+    queryFn: () => fetchProjectsByCategory(category as Category),
+  });
+
+  const imagesQ = useQuery({
+    queryKey: ["project-images", projectQ.data?.id],
+    queryFn: () => fetchProjectImages(projectQ.data!.id),
+    enabled: !!projectQ.data?.id,
+  });
+
+  if (projectQ.isLoading) {
+    return <div className="mx-auto max-w-[1600px] px-6 py-32 md:px-12 text-sm text-ink-soft">Loading…</div>;
+  }
+
+  const project = projectQ.data;
+  if (!project || !cat) {
+    return (
+      <div className="mx-auto max-w-[1600px] px-6 py-32 md:px-12">
+        <p className="font-display text-3xl uppercase">Project not found</p>
+        <Link to="/work" className="link-underline mt-6 inline-block text-sm uppercase tracking-widest">
+          ← Back to work
+        </Link>
+      </div>
+    );
+  }
+
+  const siblings = siblingsQ.data ?? [];
+  const idx = siblings.findIndex((s) => s.slug === project.slug);
+  const prev = siblings.length ? siblings[(idx - 1 + siblings.length) % siblings.length] : null;
+  const next = siblings.length ? siblings[(idx + 1) % siblings.length] : null;
+  const images = imagesQ.data ?? [];
 
   return (
     <article>
@@ -49,7 +72,7 @@ function ProjectDetail() {
             <Link to="/work" className="link-underline">Work</Link>
             <span>/</span>
             <Link to="/work/$category" params={{ category: project.category }} className="link-underline">
-              {categoryLabel}
+              {cat.label}
             </Link>
           </div>
           <h1 className="mt-6 font-display text-[12vw] uppercase leading-[0.85] md:text-[8vw]">
@@ -73,38 +96,43 @@ function ProjectDetail() {
       </header>
 
       <section className="mx-auto max-w-[1400px] space-y-10 px-6 py-16 md:px-12 md:py-24">
-        {project.gallery.map((src: string, i: number) => (
-          <figure key={i} className="bg-paper-soft">
+        {project.cover_url && (
+          <figure className="bg-paper-soft">
+            <img src={project.cover_url} alt={project.title} className="block w-full" loading="eager" />
+          </figure>
+        )}
+        {images.map((img, i) => (
+          <figure key={img.id} className="bg-paper-soft">
             <img
-              src={src}
+              src={img.url}
               alt={`${project.title} — image ${i + 1}`}
-              width={1280}
-              height={1600}
-              loading={i === 0 ? "eager" : "lazy"}
+              loading="lazy"
               className="block w-full"
             />
           </figure>
         ))}
       </section>
 
-      <nav className="border-t border-ink/90">
-        <div className="mx-auto flex max-w-[1600px] items-center justify-between px-6 py-10 text-sm uppercase tracking-widest md:px-12">
-          <Link
-            to="/work/$category/$slug"
-            params={{ category: prev.category, slug: prev.slug }}
-            className="link-underline"
-          >
-            ← {prev.title}
-          </Link>
-          <Link
-            to="/work/$category/$slug"
-            params={{ category: next.category, slug: next.slug }}
-            className="link-underline"
-          >
-            {next.title} →
-          </Link>
-        </div>
-      </nav>
+      {prev && next && (
+        <nav className="border-t border-ink/90">
+          <div className="mx-auto flex max-w-[1600px] items-center justify-between px-6 py-10 text-sm uppercase tracking-widest md:px-12">
+            <Link
+              to="/work/$category/$slug"
+              params={{ category: prev.category, slug: prev.slug }}
+              className="link-underline"
+            >
+              ← {prev.title}
+            </Link>
+            <Link
+              to="/work/$category/$slug"
+              params={{ category: next.category, slug: next.slug }}
+              className="link-underline"
+            >
+              {next.title} →
+            </Link>
+          </div>
+        </nav>
+      )}
     </article>
   );
 }

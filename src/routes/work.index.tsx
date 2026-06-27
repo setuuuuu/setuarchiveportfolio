@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { CATEGORIES, getProjects } from "@/data/projects";
+import { useQuery } from "@tanstack/react-query";
+import { CATEGORIES } from "@/data/projects";
+import { fetchAllProjects } from "@/lib/projects-api";
 
 export const Route = createFileRoute("/work/")({
   head: () => ({
@@ -14,6 +16,8 @@ export const Route = createFileRoute("/work/")({
 });
 
 function WorkIndex() {
+  const { data: all = [] } = useQuery({ queryKey: ["projects"], queryFn: fetchAllProjects });
+
   return (
     <div>
       <section className="border-b border-ink/90">
@@ -27,7 +31,7 @@ function WorkIndex() {
 
       <section className="mx-auto max-w-[1600px] px-6 md:px-12">
         {CATEGORIES.map((c, idx) => {
-          const items = getProjects(c.id);
+          const items = all.filter((p) => p.category === c.id);
           const preview = items[0];
           return (
             <Link
@@ -45,18 +49,16 @@ function WorkIndex() {
                 <p className="mt-2 text-xs uppercase tracking-widest text-ink-soft">{items.length} projects</p>
               </div>
               <div className="col-span-12 md:col-span-6">
-                {preview && (
-                  <div className="overflow-hidden bg-paper-soft">
+                <div className="overflow-hidden bg-paper-soft aspect-[4/3]">
+                  {preview?.cover_url && (
                     <img
-                      src={preview.cover}
+                      src={preview.cover_url}
                       alt={preview.title}
-                      width={1024}
-                      height={1280}
                       loading="lazy"
-                      className="block w-full transition-transform duration-700 group-hover:scale-[1.02]"
+                      className="block h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
                     />
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </Link>
           );
