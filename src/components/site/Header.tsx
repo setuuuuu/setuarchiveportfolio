@@ -11,6 +11,7 @@ const NAV = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const { user, isAdmin } = useAuth();
 
   return (
     <header className="border-b border-ink/90 bg-paper">
