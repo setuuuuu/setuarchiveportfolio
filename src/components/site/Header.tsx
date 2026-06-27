@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
 
 const NAV = [
   { to: "/", label: "Index" },
@@ -10,6 +11,7 @@ const NAV = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const { user, isAdmin } = useAuth();
 
   return (
     <header className="border-b border-ink/90 bg-paper">
@@ -33,6 +35,12 @@ export function Header() {
               {item.label}
             </Link>
           ))}
+          {user && isAdmin && (
+            <Link to="/admin" className="link-underline">Admin</Link>
+          )}
+          {!user && (
+            <Link to="/auth" className="link-underline opacity-60">Sign in</Link>
+          )}
         </nav>
         <button
           type="button"
