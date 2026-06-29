@@ -43,6 +43,23 @@ export async function fetchProjectImages(projectId: string): Promise<ProjectImag
   return (data ?? []) as ProjectImage[];
 }
 
-export function publicImageUrl(path: string): string {
-  return supabase.storage.from("work").getPublicUrl(path).data.publicUrl;
+// Bucket is private (workspace blocks public buckets). Use a 10-year signed URL
+// so admin uploads render anywhere without per-request signing.
+const TEN_YEARS = 60 * 60 * 24 * 365 * 10;
+
+export async function signedImageUrl(path: string): Promise<string> {
+  const { data, error } = await supabase.storage.from("work").createSignedUrl(path, TEN_YEARS);
+  if (error || !data) throw error ?? new Error("Could not sign URL");
+  return data.signedUrl;
+}
+
+export async function uploadProjectFile(file: File): Promise<string> {
+  const ext = file.name.split(".").pop() ?? "bin";
+  const path = `${crypto.randomUUID()}.${ext}`;
+  const { error } = await supabase.storage.from("work").upload(path, file, {
+    contentType: file.type,
+    upsert: false,
+  });
+  if (error) throw error;
+  return signedImageUrl(path);
 }
