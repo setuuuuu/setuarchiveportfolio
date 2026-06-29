@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
+import { useSettings } from "@/hooks/use-settings";
 
 const NAV = [
   { to: "/", label: "Index" },
@@ -12,6 +13,7 @@ const NAV = [
 export function Header() {
   const [open, setOpen] = useState(false);
   const { user, isAdmin } = useAuth();
+  const { site } = useSettings();
 
   return (
     <header className="border-b border-ink/90 bg-paper">
@@ -21,7 +23,7 @@ export function Header() {
           className="font-display text-lg uppercase tracking-tight"
           onClick={() => setOpen(false)}
         >
-          Studio / Name
+          {site.name}
         </Link>
         <nav className="hidden gap-10 text-sm uppercase tracking-widest md:flex">
           {NAV.map((item) => (
