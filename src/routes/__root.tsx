@@ -107,6 +107,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ThemeStyles />
       <div className="flex min-h-screen flex-col bg-paper text-ink">
         <Header />
         <main className="flex-1">
