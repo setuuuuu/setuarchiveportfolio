@@ -52,40 +52,32 @@ function Index() {
             <Link to="/auth" className="link-underline">Sign in</Link> to add your first project.
           </p>
         ) : (
-          <div className="grid grid-cols-12 gap-x-6 gap-y-16">
-            {featured.map((p, i) => {
-              const layout = [
-                "col-span-12 md:col-span-7",
-                "col-span-12 md:col-span-5 md:mt-32",
-                "col-span-12 md:col-span-5",
-                "col-span-12 md:col-span-7 md:-mt-12",
-              ][i];
-              return (
-                <Link
-                  key={p.id}
-                  to="/work/$category/$slug"
-                  params={{ category: p.category, slug: p.slug }}
-                  className={`${layout} group block`}
-                >
-                  <div className="overflow-hidden bg-paper-soft aspect-[4/5]">
-                    {p.cover_url && (
-                      <img
-                        src={p.cover_url}
-                        alt={p.title}
-                        loading={i === 0 ? "eager" : "lazy"}
-                        className="block h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
-                      />
-                    )}
-                  </div>
-                  <div className="mt-4 flex items-baseline justify-between text-sm">
-                    <span className="font-display text-base uppercase">{p.title}</span>
-                    <span className="text-xs uppercase tracking-widest text-ink-soft">
-                      {p.year} — {p.category.replace("-", " ")}
-                    </span>
-                  </div>
-                </Link>
-              );
-            })}
+          <div className="grid grid-cols-1 gap-x-6 gap-y-16 md:grid-cols-2">
+            {featured.map((p, i) => (
+              <Link
+                key={p.id}
+                to="/work/$category/$slug"
+                params={{ category: p.category, slug: p.slug }}
+                className="group block"
+              >
+                <div className="overflow-hidden bg-paper-soft aspect-[4/5]">
+                  {p.cover_url && (
+                    <img
+                      src={p.cover_url}
+                      alt={p.title}
+                      loading={i === 0 ? "eager" : "lazy"}
+                      className="block h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                    />
+                  )}
+                </div>
+                <div className="mt-4 flex items-baseline justify-between text-sm">
+                  <span className="font-display text-base uppercase">{p.title}</span>
+                  <span className="text-xs uppercase tracking-widest text-ink-soft">
+                    {p.year} — {p.category.replace("-", " ")}
+                  </span>
+                </div>
+              </Link>
+            ))}
           </div>
         )}
       </section>

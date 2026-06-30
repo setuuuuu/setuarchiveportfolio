@@ -37,12 +37,6 @@ export function Header() {
               {item.label}
             </Link>
           ))}
-          {user && isAdmin && (
-            <Link to="/admin" className="link-underline">Admin</Link>
-          )}
-          {!user && (
-            <Link to="/auth" className="link-underline opacity-60">Sign in</Link>
-          )}
         </nav>
         <button
           type="button"
