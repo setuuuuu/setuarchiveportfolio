@@ -10,7 +10,7 @@ export type ThemeSettings = {
 export type SiteSettings = {
   site: { name: string; tagline: string };
   home: { eyebrow: string; headline: string; intro: string; featuredLabel: string };
-  about: { heading: string; body: string; sideNote: string };
+  about: { heading: string; body: string; sideNote: string; portraitUrl: string };
   contact: { heading: string; intro: string; email: string; location: string };
   footer: { line: string };
   theme: ThemeSettings;
