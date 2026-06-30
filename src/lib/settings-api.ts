@@ -28,6 +28,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     heading: "About",
     body: "I'm a graphic designer focused on typography, cover art, and editorial print.",
     sideNote: "Available for select projects.",
+    portraitUrl: "",
   },
   contact: {
     heading: "Contact",
