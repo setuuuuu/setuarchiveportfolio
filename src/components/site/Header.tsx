@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { useAuth } from "@/hooks/use-auth";
 import { useSettings } from "@/hooks/use-settings";
 
 const NAV = [
@@ -12,7 +11,6 @@ const NAV = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
-  const { user, isAdmin } = useAuth();
   const { site } = useSettings();
 
   return (
