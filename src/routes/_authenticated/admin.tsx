@@ -437,6 +437,35 @@ function ContentTab() {
           <input className={inputCls} value={draft.about.sideNote}
             onChange={(e) => patch("about", { sideNote: e.target.value })} />
         </Field>
+        <Field label="Portrait image">
+          {draft.about.portraitUrl && (
+            <img src={draft.about.portraitUrl} alt="portrait" className="mb-3 max-h-48 border border-ink/15" />
+          )}
+          <div className="flex flex-wrap items-center gap-3">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={async (e) => {
+                const f = e.target.files?.[0];
+                if (!f) return;
+                try {
+                  const url = await uploadProjectFile(f);
+                  patch("about", { portraitUrl: url });
+                } catch (err) {
+                  alert(err instanceof Error ? err.message : "Upload failed");
+                }
+                e.target.value = "";
+              }}
+            />
+            {draft.about.portraitUrl && (
+              <button type="button" onClick={() => patch("about", { portraitUrl: "" })}
+                className="text-xs uppercase tracking-widest text-red-700 link-underline">
+                Remove
+              </button>
+            )}
+          </div>
+          <p className="mt-2 text-xs text-ink-soft">Leave empty to hide the portrait on the About page.</p>
+        </Field>
         <SaveBtn busy={busy === "about"} onClick={() => saveSection("about")} />
       </Section>
 
