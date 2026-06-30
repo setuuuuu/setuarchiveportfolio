@@ -96,11 +96,7 @@ function ProjectDetail() {
       </header>
 
       <section className="mx-auto max-w-[1400px] space-y-10 px-6 py-16 md:px-12 md:py-24">
-        {project.cover_url && (
-          <figure className="bg-paper-soft">
-            <img src={project.cover_url} alt={project.title} className="block w-full" loading="eager" />
-          </figure>
-        )}
+
         {images.map((img, i) => (
           <figure key={img.id} className="bg-paper-soft">
             <img
