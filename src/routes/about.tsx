@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import portrait from "@/assets/portrait.jpg";
 import { useSettings } from "@/hooks/use-settings";
 
 export const Route = createFileRoute("/about")({
