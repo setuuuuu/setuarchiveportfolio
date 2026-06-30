@@ -327,7 +327,7 @@ function ProjectEditor({ project, onDelete, onChange }: { project: Project; onDe
         <div className="mt-3 grid grid-cols-3 gap-3">
           {images.map((img) => (
             <div key={img.id} className="relative">
-              <img src={img.url} alt="" className="aspect-square w-full object-cover border border-ink/15" />
+              <img src={img.url} alt="" className="block w-full h-auto border border-ink/15" />
               <button
                 type="button"
                 onClick={() => removeImage(img.id)}
