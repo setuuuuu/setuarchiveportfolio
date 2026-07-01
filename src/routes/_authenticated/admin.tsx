@@ -343,19 +343,41 @@ function ProjectEditor({ project, onDelete, onChange }: { project: Project; onDe
                   ×
                 </button>
               </div>
-              <input
-                className={inputCls}
-                placeholder="Title / description (optional)"
-                defaultValue={img.caption ?? ""}
-                onBlur={(e) => { if (e.target.value !== (img.caption ?? "")) updateImageMeta(img.id, { caption: e.target.value }); }}
-              />
-              <textarea
-                className={inputCls}
-                rows={2}
-                placeholder="Thought process (optional)"
-                defaultValue={img.note ?? ""}
-                onBlur={(e) => { if (e.target.value !== (img.note ?? "")) updateImageMeta(img.id, { note: e.target.value }); }}
-              />
+              <div className="flex items-center gap-2">
+                <input
+                  className={inputCls + " flex-1"}
+                  placeholder="Title / description (optional)"
+                  defaultValue={img.caption ?? ""}
+                  onBlur={(e) => { if (e.target.value !== (img.caption ?? "")) updateImageMeta(img.id, { caption: e.target.value }); }}
+                />
+                <label className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-ink-soft">
+                  Size
+                  <input
+                    type="number" min={8} max={72}
+                    className="w-14 border-b border-ink bg-transparent py-1 text-sm outline-none"
+                    defaultValue={img.caption_size ?? 14}
+                    onBlur={(e) => { const n = parseInt(e.target.value, 10); if (n && n !== img.caption_size) updateImageMeta(img.id, { caption_size: n }); }}
+                  />
+                </label>
+              </div>
+              <div className="flex items-start gap-2">
+                <textarea
+                  className={inputCls + " flex-1"}
+                  rows={2}
+                  placeholder="Thought process (optional)"
+                  defaultValue={img.note ?? ""}
+                  onBlur={(e) => { if (e.target.value !== (img.note ?? "")) updateImageMeta(img.id, { note: e.target.value }); }}
+                />
+                <label className="flex items-center gap-1 pt-2 text-[10px] uppercase tracking-widest text-ink-soft">
+                  Size
+                  <input
+                    type="number" min={8} max={72}
+                    className="w-14 border-b border-ink bg-transparent py-1 text-sm outline-none"
+                    defaultValue={img.note_size ?? 14}
+                    onBlur={(e) => { const n = parseInt(e.target.value, 10); if (n && n !== img.note_size) updateImageMeta(img.id, { note_size: n }); }}
+                  />
+                </label>
+              </div>
             </div>
           ))}
         </div>
