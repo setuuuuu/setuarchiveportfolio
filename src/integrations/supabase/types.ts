@@ -17,27 +17,33 @@ export type Database = {
       project_images: {
         Row: {
           caption: string
+          caption_size: number
           created_at: string
           id: string
           note: string
+          note_size: number
           project_id: string
           sort_order: number
           url: string
         }
         Insert: {
           caption?: string
+          caption_size?: number
           created_at?: string
           id?: string
           note?: string
+          note_size?: number
           project_id: string
           sort_order?: number
           url: string
         }
         Update: {
           caption?: string
+          caption_size?: number
           created_at?: string
           id?: string
           note?: string
+          note_size?: number
           project_id?: string
           sort_order?: number
           url?: string
