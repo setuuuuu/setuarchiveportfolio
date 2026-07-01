@@ -290,7 +290,7 @@ function ProjectEditor({ project, onDelete, onChange }: { project: Project; onDe
     refetchImages();
   }
 
-  async function updateImageMeta(id: string, patch: { caption?: string; note?: string }) {
+  async function updateImageMeta(id: string, patch: { caption?: string; note?: string; caption_size?: number; note_size?: number }) {
     const { error } = await supabase.from("project_images").update(patch).eq("id", id);
     if (error) return alert(error.message);
     refetchImages();
@@ -343,19 +343,41 @@ function ProjectEditor({ project, onDelete, onChange }: { project: Project; onDe
                   ×
                 </button>
               </div>
-              <input
-                className={inputCls}
-                placeholder="Title / description (optional)"
-                defaultValue={img.caption ?? ""}
-                onBlur={(e) => { if (e.target.value !== (img.caption ?? "")) updateImageMeta(img.id, { caption: e.target.value }); }}
-              />
-              <textarea
-                className={inputCls}
-                rows={2}
-                placeholder="Thought process (optional)"
-                defaultValue={img.note ?? ""}
-                onBlur={(e) => { if (e.target.value !== (img.note ?? "")) updateImageMeta(img.id, { note: e.target.value }); }}
-              />
+              <div className="flex items-center gap-2">
+                <input
+                  className={inputCls + " flex-1"}
+                  placeholder="Title / description (optional)"
+                  defaultValue={img.caption ?? ""}
+                  onBlur={(e) => { if (e.target.value !== (img.caption ?? "")) updateImageMeta(img.id, { caption: e.target.value }); }}
+                />
+                <label className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-ink-soft">
+                  Size
+                  <input
+                    type="number" min={8} max={72}
+                    className="w-14 border-b border-ink bg-transparent py-1 text-sm outline-none"
+                    defaultValue={img.caption_size ?? 14}
+                    onBlur={(e) => { const n = parseInt(e.target.value, 10); if (n && n !== img.caption_size) updateImageMeta(img.id, { caption_size: n }); }}
+                  />
+                </label>
+              </div>
+              <div className="flex items-start gap-2">
+                <textarea
+                  className={inputCls + " flex-1"}
+                  rows={2}
+                  placeholder="Thought process (optional)"
+                  defaultValue={img.note ?? ""}
+                  onBlur={(e) => { if (e.target.value !== (img.note ?? "")) updateImageMeta(img.id, { note: e.target.value }); }}
+                />
+                <label className="flex items-center gap-1 pt-2 text-[10px] uppercase tracking-widest text-ink-soft">
+                  Size
+                  <input
+                    type="number" min={8} max={72}
+                    className="w-14 border-b border-ink bg-transparent py-1 text-sm outline-none"
+                    defaultValue={img.note_size ?? 14}
+                    onBlur={(e) => { const n = parseInt(e.target.value, 10); if (n && n !== img.note_size) updateImageMeta(img.id, { note_size: n }); }}
+                  />
+                </label>
+              </div>
             </div>
           ))}
         </div>
@@ -566,6 +588,8 @@ function ThemeTab() {
           onChange={(v) => setTheme({ ...theme, inkSoft: v })} />
         <ColorField label="Accent" value={theme.accent}
           onChange={(v) => setTheme({ ...theme, accent: v })} />
+        <ColorField label="Caption background" value={theme.captionBg}
+          onChange={(v) => setTheme({ ...theme, captionBg: v })} />
       </div>
 
       <div className="border border-ink/15 p-8" style={{ background: theme.paper, color: theme.ink }}>

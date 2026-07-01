@@ -18,6 +18,8 @@ export type ProjectImage = {
   sort_order: number;
   caption: string;
   note: string;
+  caption_size: number;
+  note_size: number;
 };
 
 export const CATEGORIES: { id: Category; label: string; description: string }[] = [

@@ -1,0 +1,1 @@
+ALTER TABLE public.project_images ADD COLUMN IF NOT EXISTS caption_size integer NOT NULL DEFAULT 14; ALTER TABLE public.project_images ADD COLUMN IF NOT EXISTS note_size integer NOT NULL DEFAULT 14;
