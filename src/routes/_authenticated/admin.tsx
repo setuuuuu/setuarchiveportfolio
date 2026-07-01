@@ -290,6 +290,12 @@ function ProjectEditor({ project, onDelete, onChange }: { project: Project; onDe
     refetchImages();
   }
 
+  async function updateImageMeta(id: string, patch: { caption?: string; note?: string }) {
+    const { error } = await supabase.from("project_images").update(patch).eq("id", id);
+    if (error) return alert(error.message);
+    refetchImages();
+  }
+
   return (
     <form onSubmit={save} className="space-y-6 border border-ink p-6 md:p-8">
       <div className="flex items-baseline justify-between">
