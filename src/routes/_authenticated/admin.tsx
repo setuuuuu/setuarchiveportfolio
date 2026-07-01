@@ -330,17 +330,32 @@ function ProjectEditor({ project, onDelete, onChange }: { project: Project; onDe
 
       <div>
         <p className="text-xs uppercase tracking-widest text-ink-soft">Gallery images ({images.length})</p>
-        <div className="mt-3 grid grid-cols-3 gap-3">
+        <div className="mt-3 grid grid-cols-1 gap-6 md:grid-cols-2">
           {images.map((img) => (
-            <div key={img.id} className="relative">
-              <img src={img.url} alt="" className="block w-full h-auto border border-ink/15" />
-              <button
-                type="button"
-                onClick={() => removeImage(img.id)}
-                className="absolute right-1 top-1 bg-ink px-2 py-1 text-[10px] uppercase tracking-widest text-paper"
-              >
-                ×
-              </button>
+            <div key={img.id} className="space-y-2 border border-ink/15 p-3">
+              <div className="relative">
+                <img src={img.url} alt="" className="block w-full h-auto" />
+                <button
+                  type="button"
+                  onClick={() => removeImage(img.id)}
+                  className="absolute right-1 top-1 bg-ink px-2 py-1 text-[10px] uppercase tracking-widest text-paper"
+                >
+                  ×
+                </button>
+              </div>
+              <input
+                className={inputCls}
+                placeholder="Title / description (optional)"
+                defaultValue={img.caption ?? ""}
+                onBlur={(e) => { if (e.target.value !== (img.caption ?? "")) updateImageMeta(img.id, { caption: e.target.value }); }}
+              />
+              <textarea
+                className={inputCls}
+                rows={2}
+                placeholder="Thought process (optional)"
+                defaultValue={img.note ?? ""}
+                onBlur={(e) => { if (e.target.value !== (img.note ?? "")) updateImageMeta(img.id, { note: e.target.value }); }}
+              />
             </div>
           ))}
         </div>
