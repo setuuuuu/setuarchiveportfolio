@@ -101,10 +101,20 @@ function ProjectDetail() {
           <figure key={img.id} className="bg-paper-soft">
             <img
               src={img.url}
-              alt={`${project.title} — image ${i + 1}`}
+              alt={img.caption || `${project.title} — image ${i + 1}`}
               loading="lazy"
               className="block w-full"
             />
+            {(img.caption || img.note) && (
+              <figcaption className="mt-4 grid gap-2 px-1 md:grid-cols-12 md:gap-6">
+                {img.caption && (
+                  <p className="text-sm font-medium md:col-span-4">{img.caption}</p>
+                )}
+                {img.note && (
+                  <p className="text-sm text-ink-soft md:col-span-8">{img.note}</p>
+                )}
+              </figcaption>
+            )}
           </figure>
         ))}
       </section>
