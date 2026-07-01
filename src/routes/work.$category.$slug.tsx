@@ -106,12 +106,12 @@ function ProjectDetail() {
               className="block w-full"
             />
             {(img.caption || img.note) && (
-              <figcaption className="mt-4 grid gap-2 px-1 md:grid-cols-12 md:gap-6">
+              <figcaption className="caption-bg mt-0 grid gap-2 p-4 md:grid-cols-12 md:gap-6 md:p-6">
                 {img.caption && (
-                  <p className="text-sm font-medium md:col-span-4">{img.caption}</p>
+                  <p className="font-medium md:col-span-4" style={{ fontSize: `${img.caption_size || 14}px` }}>{img.caption}</p>
                 )}
                 {img.note && (
-                  <p className="text-sm text-ink-soft md:col-span-8">{img.note}</p>
+                  <p className="text-ink-soft md:col-span-8" style={{ fontSize: `${img.note_size || 14}px` }}>{img.note}</p>
                 )}
               </figcaption>
             )}
