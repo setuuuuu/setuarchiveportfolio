@@ -16,6 +16,8 @@ export type ProjectImage = {
   project_id: string;
   url: string;
   sort_order: number;
+  caption: string;
+  note: string;
 };
 
 export const CATEGORIES: { id: Category; label: string; description: string }[] = [
