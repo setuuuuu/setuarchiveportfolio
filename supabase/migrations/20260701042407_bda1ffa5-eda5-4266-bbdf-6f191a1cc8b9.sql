@@ -1,0 +1,1 @@
+ALTER TABLE public.project_images ADD COLUMN IF NOT EXISTS caption text NOT NULL DEFAULT '', ADD COLUMN IF NOT EXISTS note text NOT NULL DEFAULT '';
