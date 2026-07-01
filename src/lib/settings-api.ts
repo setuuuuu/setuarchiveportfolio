@@ -5,6 +5,7 @@ export type ThemeSettings = {
   ink: string;
   inkSoft: string;
   accent: string;
+  captionBg: string;
 };
 
 export type SiteSettings = {
