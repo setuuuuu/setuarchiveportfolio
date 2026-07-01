@@ -290,7 +290,7 @@ function ProjectEditor({ project, onDelete, onChange }: { project: Project; onDe
     refetchImages();
   }
 
-  async function updateImageMeta(id: string, patch: { caption?: string; note?: string }) {
+  async function updateImageMeta(id: string, patch: { caption?: string; note?: string; caption_size?: number; note_size?: number }) {
     const { error } = await supabase.from("project_images").update(patch).eq("id", id);
     if (error) return alert(error.message);
     refetchImages();
