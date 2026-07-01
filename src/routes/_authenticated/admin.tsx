@@ -566,6 +566,8 @@ function ThemeTab() {
           onChange={(v) => setTheme({ ...theme, inkSoft: v })} />
         <ColorField label="Accent" value={theme.accent}
           onChange={(v) => setTheme({ ...theme, accent: v })} />
+        <ColorField label="Caption background" value={theme.captionBg}
+          onChange={(v) => setTheme({ ...theme, captionBg: v })} />
       </div>
 
       <div className="border border-ink/15 p-8" style={{ background: theme.paper, color: theme.ink }}>
