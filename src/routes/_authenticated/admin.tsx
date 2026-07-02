@@ -116,17 +116,19 @@ function ProjectsTab() {
     refetch();
   }
 
-  async function move(index: number, dir: -1 | 1) {
-    const target = index + dir;
-    if (target < 0 || target >= projects.length) return;
-    const a = projects[index];
-    const b = projects[target];
-    // Assign fresh sequential orders to make swaps deterministic
-    const aOrder = a.sort_order ?? index;
-    const bOrder = b.sort_order ?? target;
-    const { error: e1 } = await supabase.from("projects").update({ sort_order: bOrder }).eq("id", a.id);
-    const { error: e2 } = await supabase.from("projects").update({ sort_order: aOrder }).eq("id", b.id);
-    if (e1 || e2) return alert((e1 || e2)!.message);
+  async function setRank(index: number, newRank: number) {
+    const target = Math.max(1, Math.min(projects.length, newRank)) - 1;
+    if (target === index) return;
+    const arr = projects.slice();
+    const [moved] = arr.splice(index, 1);
+    arr.splice(target, 0, moved);
+    await Promise.all(
+      arr.map((p, i) =>
+        p.sort_order === i
+          ? Promise.resolve()
+          : supabase.from("projects").update({ sort_order: i }).eq("id", p.id),
+      ),
+    );
     refetch();
   }
 
@@ -146,7 +148,20 @@ function ProjectsTab() {
         </div>
         <ul className="mt-4 divide-y divide-ink/15 border-y border-ink/15">
           {projects.map((p, i) => (
-            <li key={p.id} className="flex items-center gap-2">
+            <li key={p.id} className="flex items-center gap-3">
+              <input
+                type="number"
+                min={1}
+                max={projects.length}
+                aria-label="Rank"
+                defaultValue={i + 1}
+                key={`${p.id}-${i}`}
+                onBlur={(e) => {
+                  const n = parseInt(e.target.value, 10);
+                  if (n && n !== i + 1) setRank(i, n);
+                }}
+                className="w-12 border border-ink/20 bg-transparent px-2 py-1 text-center text-sm"
+              />
               <button
                 onClick={() => { setSelected(p); setShowNew(false); }}
                 className={`flex flex-1 items-center justify-between py-3 text-left ${
@@ -158,22 +173,6 @@ function ProjectsTab() {
                   {p.category}
                 </span>
               </button>
-              <div className="flex flex-col leading-none">
-                <button
-                  type="button"
-                  aria-label="Move up"
-                  disabled={i === 0}
-                  onClick={() => move(i, -1)}
-                  className="px-2 text-xs disabled:opacity-30"
-                >▲</button>
-                <button
-                  type="button"
-                  aria-label="Move down"
-                  disabled={i === projects.length - 1}
-                  onClick={() => move(i, 1)}
-                  className="px-2 text-xs disabled:opacity-30"
-                >▼</button>
-              </div>
             </li>
           ))}
           {projects.length === 0 && <li className="py-6 text-sm text-ink-soft">No projects yet.</li>}
