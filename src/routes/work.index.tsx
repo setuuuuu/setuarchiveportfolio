@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { CATEGORIES } from "@/data/projects";
 import { fetchAllProjects } from "@/lib/projects-api";
+import { useSettings } from "@/hooks/use-settings";
 
 export const Route = createFileRoute("/work/")({
   head: () => ({
@@ -17,6 +18,8 @@ export const Route = createFileRoute("/work/")({
 
 function WorkIndex() {
   const { data: all = [] } = useQuery({ queryKey: ["projects"], queryFn: fetchAllProjects });
+  const { theme } = useSettings();
+  const catSize = theme.categorySize || 60;
 
   return (
     <div>
