@@ -11,7 +11,8 @@ const NAV = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
-  const { site } = useSettings();
+  const { site, theme } = useSettings();
+  const navStyle = { fontSize: `${theme.navSize || 14}px` };
 
   return (
     <header className="border-b border-ink/90 bg-paper">
@@ -23,7 +24,7 @@ export function Header() {
         >
           {site.name}
         </Link>
-        <nav className="hidden gap-10 text-sm uppercase tracking-widest md:flex">
+        <nav className="hidden gap-10 uppercase tracking-widest md:flex" style={navStyle}>
           {NAV.map((item) => (
             <Link
               key={item.to}
@@ -54,7 +55,8 @@ export function Header() {
                 <Link
                   to={item.to}
                   onClick={() => setOpen(false)}
-                  className="block px-6 py-4 text-sm uppercase tracking-widest"
+                  className="block px-6 py-4 uppercase tracking-widest"
+                  style={navStyle}
                 >
                   {item.label}
                 </Link>
