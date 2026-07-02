@@ -116,6 +116,20 @@ function ProjectsTab() {
     refetch();
   }
 
+  async function move(index: number, dir: -1 | 1) {
+    const target = index + dir;
+    if (target < 0 || target >= projects.length) return;
+    const a = projects[index];
+    const b = projects[target];
+    // Assign fresh sequential orders to make swaps deterministic
+    const aOrder = a.sort_order ?? index;
+    const bOrder = b.sort_order ?? target;
+    const { error: e1 } = await supabase.from("projects").update({ sort_order: bOrder }).eq("id", a.id);
+    const { error: e2 } = await supabase.from("projects").update({ sort_order: aOrder }).eq("id", b.id);
+    if (e1 || e2) return alert((e1 || e2)!.message);
+    refetch();
+  }
+
   return (
     <div className="grid gap-12 lg:grid-cols-[1fr_2fr]">
       <aside>
@@ -131,11 +145,11 @@ function ProjectsTab() {
           </button>
         </div>
         <ul className="mt-4 divide-y divide-ink/15 border-y border-ink/15">
-          {projects.map((p) => (
-            <li key={p.id}>
+          {projects.map((p, i) => (
+            <li key={p.id} className="flex items-center gap-2">
               <button
                 onClick={() => { setSelected(p); setShowNew(false); }}
-                className={`flex w-full items-center justify-between py-3 text-left ${
+                className={`flex flex-1 items-center justify-between py-3 text-left ${
                   selected?.id === p.id ? "font-semibold" : ""
                 }`}
               >
@@ -144,6 +158,22 @@ function ProjectsTab() {
                   {p.category}
                 </span>
               </button>
+              <div className="flex flex-col leading-none">
+                <button
+                  type="button"
+                  aria-label="Move up"
+                  disabled={i === 0}
+                  onClick={() => move(i, -1)}
+                  className="px-2 text-xs disabled:opacity-30"
+                >▲</button>
+                <button
+                  type="button"
+                  aria-label="Move down"
+                  disabled={i === projects.length - 1}
+                  onClick={() => move(i, 1)}
+                  className="px-2 text-xs disabled:opacity-30"
+                >▼</button>
+              </div>
             </li>
           ))}
           {projects.length === 0 && <li className="py-6 text-sm text-ink-soft">No projects yet.</li>}
