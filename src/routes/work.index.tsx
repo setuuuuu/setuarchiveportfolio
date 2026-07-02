@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { CATEGORIES } from "@/data/projects";
 import { fetchAllProjects } from "@/lib/projects-api";
+import { useSettings } from "@/hooks/use-settings";
 
 export const Route = createFileRoute("/work/")({
   head: () => ({
@@ -17,6 +18,8 @@ export const Route = createFileRoute("/work/")({
 
 function WorkIndex() {
   const { data: all = [] } = useQuery({ queryKey: ["projects"], queryFn: fetchAllProjects });
+  const { theme } = useSettings();
+  const catSize = theme.categorySize || 60;
 
   return (
     <div>
@@ -44,7 +47,7 @@ function WorkIndex() {
                 <span className="text-xs uppercase tracking-widest text-ink-soft">0{idx + 1}</span>
               </div>
               <div className="col-span-12 md:col-span-5">
-                <h2 className="font-display text-5xl uppercase md:text-7xl group-hover:italic">{c.label}</h2>
+                <h2 className="font-display uppercase group-hover:italic leading-[0.9]" style={{ fontSize: `${catSize}px` }}>{c.label}</h2>
                 <p className="mt-3 max-w-md text-sm text-ink-soft">{c.description}</p>
                 <p className="mt-2 text-xs uppercase tracking-widest text-ink-soft">{items.length} projects</p>
               </div>
