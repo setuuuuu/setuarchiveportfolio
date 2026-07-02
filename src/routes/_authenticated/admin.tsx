@@ -620,6 +620,15 @@ function ThemeTab() {
           onChange={(v) => setTheme({ ...theme, accent: v })} />
         <ColorField label="Caption background" value={theme.captionBg}
           onChange={(v) => setTheme({ ...theme, captionBg: v })} />
+        <label className="block">
+          <span className="text-xs uppercase tracking-widest text-ink-soft">Nav text size (Index / Work / About / Contact)</span>
+          <div className="mt-2 flex items-center gap-3">
+            <input type="number" min={10} max={40} value={theme.navSize ?? 14}
+              onChange={(e) => setTheme({ ...theme, navSize: parseInt(e.target.value, 10) || 14 })}
+              className="w-20 border-b border-ink bg-transparent py-2 outline-none" />
+            <span className="text-xs text-ink-soft">px</span>
+          </div>
+        </label>
       </div>
 
       <div className="border border-ink/15 p-8" style={{ background: theme.paper, color: theme.ink }}>
