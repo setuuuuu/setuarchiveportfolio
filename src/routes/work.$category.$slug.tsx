@@ -6,6 +6,7 @@ import {
   fetchProjectsByCategory,
   fetchProjectImages,
 } from "@/lib/projects-api";
+import { BananaCut } from "@/components/BananaCut";
 
 export const Route = createFileRoute("/work/$category/$slug")({
   head: ({ params }) => {
