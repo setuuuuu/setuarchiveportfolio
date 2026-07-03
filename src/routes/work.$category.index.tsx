@@ -24,6 +24,8 @@ export const Route = createFileRoute("/work/$category/")({
 function CategoryPage() {
   const { category } = Route.useParams();
   const cat = getCategory(category);
+  const { theme } = useSettings();
+  const headSize = theme.categoryHeadingSize || 160;
   const { data: items = [], isLoading } = useQuery({
     queryKey: ["projects", category],
     queryFn: () => fetchProjectsByCategory(category as Category),
