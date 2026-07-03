@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { CATEGORIES } from "@/data/projects";
 import { fetchAllProjects } from "@/lib/projects-api";
 import { useSettings } from "@/hooks/use-settings";
+import { BananaCut } from "@/components/BananaCut";
 
 export const Route = createFileRoute("/")({
   head: () => ({
