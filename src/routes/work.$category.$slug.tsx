@@ -97,6 +97,15 @@ function ProjectDetail() {
       </header>
 
       <section className="mx-auto max-w-[1400px] space-y-10 px-6 py-16 md:px-12 md:py-24">
+        {/* Cover hero — animated banana slice when no custom cover uploaded */}
+        <figure className="bg-paper-soft overflow-hidden aspect-[16/9]">
+          {project.cover_url ? (
+            <img src={project.cover_url} alt={project.title} className="block h-full w-full object-cover" />
+          ) : (
+            <BananaCut />
+          )}
+        </figure>
+
 
         {images.map((img, i) => (
           <figure key={img.id} className="bg-paper-soft">
