@@ -52,7 +52,7 @@ function CategoryPage() {
             <span>/</span>
             <span>{cat.label}</span>
           </div>
-          <h1 className="mt-6 font-display text-[14vw] uppercase leading-[0.85] md:text-[10vw]">
+          <h1 className="mt-6 font-display uppercase leading-[0.85]" style={{ fontSize: `${headSize}px` }}>
             {cat.label}.
           </h1>
           <p className="mt-6 max-w-2xl text-base text-ink-soft">{cat.description}</p>
