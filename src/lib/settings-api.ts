@@ -8,6 +8,7 @@ export type ThemeSettings = {
   captionBg: string;
   navSize: number;
   categorySize: number;
+  categoryHeadingSize: number;
 };
 
 export type SiteSettings = {
@@ -40,7 +41,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     location: "Available worldwide",
   },
   footer: { line: "© 2026 — Studio / Name. All rights reserved." },
-  theme: { paper: "#f5f3ee", ink: "#0d0d0d", inkSoft: "#5b5b5b", accent: "#0d0d0d", captionBg: "#e8e4dd", navSize: 14, categorySize: 60 },
+  theme: { paper: "#f5f3ee", ink: "#0d0d0d", inkSoft: "#5b5b5b", accent: "#0d0d0d", captionBg: "#e8e4dd", navSize: 14, categorySize: 60, categoryHeadingSize: 160 },
 };
 
 export async function fetchSettings(): Promise<SiteSettings> {

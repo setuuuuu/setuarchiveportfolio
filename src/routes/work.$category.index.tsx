@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { CATEGORIES, getCategory, type Category } from "@/data/projects";
 import { fetchProjectsByCategory } from "@/lib/projects-api";
+import { useSettings } from "@/hooks/use-settings";
 
 export const Route = createFileRoute("/work/$category/")({
   head: ({ params }) => {
@@ -23,6 +24,8 @@ export const Route = createFileRoute("/work/$category/")({
 function CategoryPage() {
   const { category } = Route.useParams();
   const cat = getCategory(category);
+  const { theme } = useSettings();
+  const headSize = theme.categoryHeadingSize || 160;
   const { data: items = [], isLoading } = useQuery({
     queryKey: ["projects", category],
     queryFn: () => fetchProjectsByCategory(category as Category),
@@ -49,7 +52,7 @@ function CategoryPage() {
             <span>/</span>
             <span>{cat.label}</span>
           </div>
-          <h1 className="mt-6 font-display text-[14vw] uppercase leading-[0.85] md:text-[10vw]">
+          <h1 className="mt-6 font-display uppercase leading-[0.85]" style={{ fontSize: `${headSize}px` }}>
             {cat.label}.
           </h1>
           <p className="mt-6 max-w-2xl text-base text-ink-soft">{cat.description}</p>

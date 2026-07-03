@@ -637,6 +637,15 @@ function ThemeTab() {
             <span className="text-xs text-ink-soft">px</span>
           </div>
         </label>
+        <label className="block">
+          <span className="text-xs uppercase tracking-widest text-ink-soft">Category page heading size (Typography / Cover Art / Designs page)</span>
+          <div className="mt-2 flex items-center gap-3">
+            <input type="number" min={24} max={400} value={theme.categoryHeadingSize ?? 160}
+              onChange={(e) => setTheme({ ...theme, categoryHeadingSize: parseInt(e.target.value, 10) || 160 })}
+              className="w-20 border-b border-ink bg-transparent py-2 outline-none" />
+            <span className="text-xs text-ink-soft">px</span>
+          </div>
+        </label>
       </div>
 
       <div className="border border-ink/15 p-8" style={{ background: theme.paper, color: theme.ink }}>
