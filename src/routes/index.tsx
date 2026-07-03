@@ -61,13 +61,15 @@ function Index() {
                 className="group block"
               >
                 <div className="overflow-hidden bg-paper-soft aspect-[4/5]">
-                  {p.cover_url && (
+                  {p.cover_url ? (
                     <img
                       src={p.cover_url}
                       alt={p.title}
                       loading={i === 0 ? "eager" : "lazy"}
                       className="block h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
                     />
+                  ) : (
+                    <BananaCut />
                   )}
                 </div>
                 <div className="mt-4 flex items-baseline justify-between text-sm">
