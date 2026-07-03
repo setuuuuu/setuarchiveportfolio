@@ -54,13 +54,15 @@ function WorkIndex() {
               </div>
               <div className="col-span-12 md:col-span-6">
                 <div className="overflow-hidden bg-paper-soft aspect-[4/3]">
-                  {preview?.cover_url && (
+                  {preview?.cover_url ? (
                     <img
                       src={preview.cover_url}
                       alt={preview.title}
                       loading="lazy"
                       className="block h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
                     />
+                  ) : (
+                    <BananaCut />
                   )}
                 </div>
               </div>
