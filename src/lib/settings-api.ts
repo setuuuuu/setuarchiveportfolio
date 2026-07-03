@@ -8,6 +8,7 @@ export type ThemeSettings = {
   captionBg: string;
   navSize: number;
   categorySize: number;
+  categoryHeadingSize: number;
 };
 
 export type SiteSettings = {
