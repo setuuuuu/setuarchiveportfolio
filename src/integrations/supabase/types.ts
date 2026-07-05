@@ -63,6 +63,7 @@ export type Database = {
           blurb: string
           category: string
           cover_url: string
+          cover_video_url: string
           created_at: string
           id: string
           slug: string
@@ -75,6 +76,7 @@ export type Database = {
           blurb?: string
           category: string
           cover_url?: string
+          cover_video_url?: string
           created_at?: string
           id?: string
           slug: string
@@ -87,6 +89,7 @@ export type Database = {
           blurb?: string
           category?: string
           cover_url?: string
+          cover_video_url?: string
           created_at?: string
           id?: string
           slug?: string
