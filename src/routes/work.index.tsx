@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { CATEGORIES } from "@/data/projects";
 import { fetchAllProjects } from "@/lib/projects-api";
 import { useSettings } from "@/hooks/use-settings";
-import { BananaCut } from "@/components/BananaCut";
+import { CoverMedia } from "@/components/CoverMedia";
 
 export const Route = createFileRoute("/work/")({
   head: () => ({
@@ -54,15 +54,14 @@ function WorkIndex() {
               </div>
               <div className="col-span-12 md:col-span-6">
                 <div className="overflow-hidden bg-paper-soft aspect-[4/3]">
-                  {preview?.cover_url ? (
-                    <img
-                      src={preview.cover_url}
+                  {preview ? (
+                    <CoverMedia
+                      imageUrl={preview.cover_url}
+                      videoUrl={preview.cover_video_url}
                       alt={preview.title}
-                      loading="lazy"
-                      className="block h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
                     />
                   ) : (
-                    <BananaCut />
+                    <div className="h-full w-full" />
                   )}
                 </div>
               </div>

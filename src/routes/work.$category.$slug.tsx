@@ -6,7 +6,7 @@ import {
   fetchProjectsByCategory,
   fetchProjectImages,
 } from "@/lib/projects-api";
-import { BananaCut } from "@/components/BananaCut";
+import { CoverMedia } from "@/components/CoverMedia";
 
 export const Route = createFileRoute("/work/$category/$slug")({
   head: ({ params }) => {
@@ -99,11 +99,12 @@ function ProjectDetail() {
       <section className="mx-auto max-w-[1400px] space-y-10 px-6 py-16 md:px-12 md:py-24">
         {/* Cover hero — animated banana slice when no custom cover uploaded */}
         <figure className="bg-paper-soft overflow-hidden aspect-[16/9]">
-          {project.cover_url ? (
-            <img src={project.cover_url} alt={project.title} className="block h-full w-full object-cover" />
-          ) : (
-            <BananaCut />
-          )}
+          <CoverMedia
+            imageUrl={project.cover_url}
+            videoUrl={project.cover_video_url}
+            alt={project.title}
+            imgClassName="block h-full w-full object-cover"
+          />
         </figure>
 
 
