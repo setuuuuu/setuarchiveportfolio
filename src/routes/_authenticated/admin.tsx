@@ -203,6 +203,7 @@ function NewProjectForm({ onDone }: { onDone: () => void }) {
   const [year, setYear] = useState(String(new Date().getFullYear()));
   const [blurb, setBlurb] = useState("");
   const [cover, setCover] = useState<File | null>(null);
+  const [coverVideo, setCoverVideo] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
@@ -212,10 +213,12 @@ function NewProjectForm({ onDone }: { onDone: () => void }) {
     setErr(null);
     try {
       let coverUrl = "";
+      let coverVideoUrl = "";
       if (cover) coverUrl = await uploadProjectFile(cover);
+      if (coverVideo) coverVideoUrl = await uploadProjectFile(coverVideo);
       const slug = slugify(title) || crypto.randomUUID().slice(0, 8);
       const { error } = await supabase.from("projects").insert({
-        title, category, year, blurb, slug, cover_url: coverUrl,
+        title, category, year, blurb, slug, cover_url: coverUrl, cover_video_url: coverVideoUrl,
       });
       if (error) throw error;
       onDone();
@@ -246,6 +249,9 @@ function NewProjectForm({ onDone }: { onDone: () => void }) {
       <Field label="Cover image (any size)">
         <input type="file" accept="image/*" onChange={(e) => setCover(e.target.files?.[0] ?? null)} />
       </Field>
+      <Field label="Cover video (optional — plays on click)">
+        <input type="file" accept="video/*" onChange={(e) => setCoverVideo(e.target.files?.[0] ?? null)} />
+      </Field>
       {err && <p className="text-sm text-red-700">{err}</p>}
       <button disabled={busy} className="border border-ink bg-ink px-6 py-3 text-xs uppercase tracking-widest text-paper disabled:opacity-50">
         {busy ? "Saving…" : "Create"}
@@ -261,6 +267,7 @@ function ProjectEditor({ project, onDelete, onChange }: { project: Project; onDe
   const [blurb, setBlurb] = useState(project.blurb);
   const [slug, setSlug] = useState(project.slug);
   const [coverUrl, setCoverUrl] = useState(project.cover_url);
+  const [coverVideoUrl, setCoverVideoUrl] = useState(project.cover_video_url ?? "");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
@@ -275,7 +282,7 @@ function ProjectEditor({ project, onDelete, onChange }: { project: Project; onDe
     try {
       const { error } = await supabase
         .from("projects")
-        .update({ title, category, year, blurb, slug, cover_url: coverUrl })
+        .update({ title, category, year, blurb, slug, cover_url: coverUrl, cover_video_url: coverVideoUrl })
         .eq("id", project.id);
       if (error) throw error;
       onChange();
@@ -290,6 +297,18 @@ function ProjectEditor({ project, onDelete, onChange }: { project: Project; onDe
       const url = await uploadProjectFile(file);
       setCoverUrl(url);
       await supabase.from("projects").update({ cover_url: url }).eq("id", project.id);
+      onChange();
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "Failed");
+    } finally { setBusy(false); }
+  }
+
+  async function changeCoverVideo(file: File | null) {
+    setBusy(true);
+    try {
+      const url = file ? await uploadProjectFile(file) : "";
+      setCoverVideoUrl(url);
+      await supabase.from("projects").update({ cover_video_url: url }).eq("id", project.id);
       onChange();
     } catch (e) {
       setErr(e instanceof Error ? e.message : "Failed");
@@ -355,6 +374,22 @@ function ProjectEditor({ project, onDelete, onChange }: { project: Project; onDe
       <Field label="Cover image">
         {coverUrl && <img src={coverUrl} alt="cover" className="mb-3 max-h-48 border border-ink/15" />}
         <input type="file" accept="image/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) changeCover(f); }} />
+      </Field>
+
+      <Field label="Cover video (optional — plays on click)">
+        {coverVideoUrl && (
+          <div className="mb-3 space-y-2">
+            <video src={coverVideoUrl} controls className="max-h-48 border border-ink/15" />
+            <button
+              type="button"
+              onClick={() => changeCoverVideo(null)}
+              className="text-xs uppercase tracking-widest text-red-700 link-underline"
+            >
+              Remove video
+            </button>
+          </div>
+        )}
+        <input type="file" accept="video/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) changeCoverVideo(f); }} />
       </Field>
 
       <div>

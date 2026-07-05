@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { CATEGORIES, getCategory, type Category } from "@/data/projects";
 import { fetchProjectsByCategory } from "@/lib/projects-api";
 import { useSettings } from "@/hooks/use-settings";
-import { BananaCut } from "@/components/BananaCut";
+import { CoverMedia } from "@/components/CoverMedia";
 
 export const Route = createFileRoute("/work/$category/")({
   head: ({ params }) => {
@@ -75,16 +75,11 @@ function CategoryPage() {
                 className="group block"
               >
                 <div className="overflow-hidden bg-paper-soft aspect-[4/5]">
-                  {p.cover_url ? (
-                    <img
-                      src={p.cover_url}
-                      alt={p.title}
-                      loading="lazy"
-                      className="block h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
-                    />
-                  ) : (
-                    <BananaCut />
-                  )}
+                  <CoverMedia
+                    imageUrl={p.cover_url}
+                    videoUrl={p.cover_video_url}
+                    alt={p.title}
+                  />
                 </div>
                 <div className="mt-4 flex items-baseline justify-between">
                   <span className="font-display text-lg uppercase">{p.title}</span>
