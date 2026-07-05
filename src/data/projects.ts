@@ -8,6 +8,7 @@ export type Project = {
   category: Category;
   blurb: string;
   cover_url: string;
+  cover_video_url: string;
   sort_order: number;
 };
 
