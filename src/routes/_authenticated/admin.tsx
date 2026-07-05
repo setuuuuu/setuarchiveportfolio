@@ -376,6 +376,22 @@ function ProjectEditor({ project, onDelete, onChange }: { project: Project; onDe
         <input type="file" accept="image/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) changeCover(f); }} />
       </Field>
 
+      <Field label="Cover video (optional — plays on click)">
+        {coverVideoUrl && (
+          <div className="mb-3 space-y-2">
+            <video src={coverVideoUrl} controls className="max-h-48 border border-ink/15" />
+            <button
+              type="button"
+              onClick={() => changeCoverVideo(null)}
+              className="text-xs uppercase tracking-widest text-red-700 link-underline"
+            >
+              Remove video
+            </button>
+          </div>
+        )}
+        <input type="file" accept="video/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) changeCoverVideo(f); }} />
+      </Field>
+
       <div>
         <p className="text-xs uppercase tracking-widest text-ink-soft">Gallery images ({images.length})</p>
         <div className="mt-3 grid grid-cols-1 gap-6 md:grid-cols-2">
